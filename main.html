@@ -1,3 +1,4 @@
+<!-- See live demo at http://jsfiddle.net/Yibster/baq5f16w/ -->
 <!DOCTYPE html>
 <canvas id="canvas" width="500" height="500"></canvas>
 <script>
@@ -53,7 +54,7 @@
 
     var main = function() {
         c.clear(); //clear the demo window
-        c.fillText("Simple JavaScript animation demo by Yibo", 20, 10);
+        c.fillText("Simple fractal tree animation in JS", 20, 10);
         c.fillText("Fractal tree of order " + ORDER, 20, 40);
         draw_tree(ORDER, THETA, 300, 280, 420, -Math.PI / 2);
         THETA += 0.01;
