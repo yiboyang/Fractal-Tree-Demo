@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<canvas id="canvas" width="500" height="500"></canvas>
+<script>
+    function draw_tree(order, theta, sz, x, y, direction, color, depth) {
+        depth = typeof depth !== 'undefined' ? depth : 0; //default value for depth is 0
+        color = typeof color !== 'undefined' ? color : "rgb(0,0,255)"; //default color is blue
+        var trunk_ratio = 0.25; // trunk length relative to stem length
+        var trunk = sz * trunk_ratio; //trunk length determined by stem length
+        var delta_x = trunk * Math.cos(direction);
+        var delta_y = trunk * Math.sin(direction);
+        var newx = x + delta_x; // update the positions with deltas
+        var newy = y + delta_y;
+        // draw things out!
+        c.beginPath();
+        c.moveTo(x, y);
+        c.lineTo(newx, newy);
+        c.strokeStyle = color;
+        c.stroke();
+
+        var color1;
+        var color2;
+        if (order > 0) {
+
+            // Color the two major recursive branches with red and blue
+            if (depth % 2 == 1) {
+                color1 = "rgb(255, 0, 0)";
+                color2 = "rgb(0, 0, 255)";
+            } else {
+                color1 = color;
+                color2 = color;
+            }
+            // Recursive calls to draw the two subtrees
+            var newsz = sz * (1 - trunk_ratio);
+            draw_tree(order - 1, theta, newsz, newx, newy, direction - theta, color1, depth + 1);
+            draw_tree(order - 1, theta, newsz, newx, newy, direction + theta, color2, depth + 1);
+        }
+    }
+
+    //Define global variables to help drawing
+    var THETA = 0;
+    var ORDER = 0;
+    //Get a handler to the canvas
+    canvas = document.getElementById('canvas');
+    c = canvas.getContext('2d');
+    c.clear = function() {
+        this.clearRect(0, 0, 500, 500); //flush the hard set window area
+    };
+
+    //setup for displaying words
+    c.font = "24px Helvetica";
+    c.textAlign = "left";
+    c.textBaseline = "top";
+
+    var main = function() {
+        c.clear(); //clear the demo window
+        c.fillText("Simple JavaScript animation demo by Yibo", 20, 10);
+        c.fillText("Fractal tree of order " + ORDER, 20, 40);
+        draw_tree(ORDER, THETA, 300, 280, 420, -Math.PI / 2);
+        THETA += 0.01;
+        //if a demo cycle is complete, increase the order
+        if (THETA % (2 * Math.PI) <= 0.01) {
+            ORDER += 1;
+            if (ORDER == 10) //demo up to 9th order
+            ORDER = 1;
+        }
+
+    }
+
+    window.setInterval(main, 20); //update every 20 milliseconds
+</script>
